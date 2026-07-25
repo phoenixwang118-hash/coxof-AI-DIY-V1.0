@@ -1,12 +1,12 @@
 {
   "name": "coxof-ai-diy-frontend",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "oxlint src",
+    "build": "tsc -b && tsc -p tsconfig.api.json && vite build",
+    "lint": "oxlint src api",
     "preview": "vite preview"
   },
   "dependencies": {
