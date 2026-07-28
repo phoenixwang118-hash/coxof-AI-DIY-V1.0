@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1784960982968,
+      "tag": "0000_aromatic_sheva_callister",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1784962678032,
+      "tag": "0001_colossal_wolfpack",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1785137381134,
+      "tag": "0002_last_archangel",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1785139793557,
+      "tag": "0003_blushing_pride",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1785139892111,
+      "tag": "0004_strong_king_cobra",
+      "breakpoints": true
+    }
+  ]
+}
