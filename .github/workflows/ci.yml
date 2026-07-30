@@ -1,0 +1,33 @@
+name: coxof AI DIY CI
+
+on:
+  pull_request:
+    paths:
+      - "coxof-ai-diy/frontend/**"
+      - ".github/workflows/ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "coxof-ai-diy/frontend/**"
+      - ".github/workflows/ci.yml"
+
+concurrency:
+  group: coxof-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: coxof-ai-diy/frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: coxof-ai-diy/frontend/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint
