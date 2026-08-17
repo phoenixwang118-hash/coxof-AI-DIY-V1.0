@@ -181,6 +181,7 @@ export default function Home() {
   const [generating, setGenerating] = useState(false);
   const [results, setResults] = useState(false);
   const [mobileNav, setMobileNav] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState(1);
   const [design, setDesign] = useState<DesignState>(initialDesign);
   const [undoDesign, setUndoDesign] = useState<DesignState | null>(null);
@@ -369,6 +370,7 @@ export default function Home() {
   function navigate(next: View) {
     setView(next);
     setMobileNav(false);
+    setMoreOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -696,7 +698,7 @@ export default function Home() {
             </div>
             <button className="round" aria-label="帮助中心" onClick={() => navigate("help")}>?</button>
             <button className="round notification-button" aria-label="通知" onClick={() => { setNotificationsOpen(!notificationsOpen); setProfileOpen(false); }}>♢<i /></button>
-            <button className="cart-top" onClick={() => navigate("cart")}>购物车 <b>{cart.length}</b></button>
+            <button className={`cart-top ${view === "cart" || view === "checkout" ? "active" : ""}`} onClick={() => navigate("cart")}>购物车 <b>{cart.length}</b></button>
             <button className="new" onClick={() => openDesign()}><span>＋</span> 新建设计</button>
             <div className="profile-wrap">
               <button className="profile-top" onClick={() => { setProfileOpen(!profileOpen); setNotificationsOpen(false); }}>
@@ -713,14 +715,18 @@ export default function Home() {
           <button className={view === "dashboard" ? "active" : ""} onClick={() => navigate("dashboard")}><i>⌂</i> 工作台</button>
           <button className={view === "catalog" ? "active" : ""} onClick={() => navigate("catalog")}><i>▦</i> 产品目录</button>
           <button className={view === "design" ? "active" : ""} onClick={() => openDesign()}><i>✦</i> AI Design <b>核心</b></button>
-          <button className={view === "assets" ? "active" : ""} onClick={() => navigate("assets")}><i>◈</i> 设计素材</button>
           <button className={view === "projects" ? "active" : ""} onClick={() => navigate("projects")}><i>▱</i> 我的项目</button>
-          <span className="topnav-divider" />
-          <button className={view === "canvas" ? "active" : ""} onClick={() => navigate("canvas")}><i>□</i> Canvas 编辑器</button>
-          <button className={view === "mockup" ? "active" : ""} onClick={() => navigate("mockup")}><i>♙</i> Mockup 样机</button>
-          <button className={view === "cart" || view === "checkout" ? "active" : ""} onClick={() => navigate("cart")}><i>♧</i> 购物车<small>{cart.length}</small></button>
-          <button className={view === "orders" ? "active" : ""} onClick={() => navigate("orders")}><i>▤</i> 订单中心<small>{orders.length}</small></button>
-          <button className={view === "account" ? "active" : ""} onClick={() => navigate("account")}><i>◎</i> 账户中心</button>
+          <div className="topnav-more-wrap">
+            <button className={["assets", "canvas", "mockup", "cart", "checkout", "orders", "account"].includes(view) ? "active" : ""} onClick={() => setMoreOpen(!moreOpen)}><i>⋯</i> 更多<i className="caret">⌄</i></button>
+            {moreOpen && <div className="more-menu">
+              <button className={view === "assets" ? "active" : ""} onClick={() => { setMoreOpen(false); navigate("assets"); }}><i>◈</i> 设计素材</button>
+              <button className={view === "canvas" ? "active" : ""} onClick={() => { setMoreOpen(false); navigate("canvas"); }}><i>□</i> Canvas 编辑器</button>
+              <button className={view === "mockup" ? "active" : ""} onClick={() => { setMoreOpen(false); navigate("mockup"); }}><i>♙</i> Mockup 样机</button>
+              <button className={view === "cart" || view === "checkout" ? "active" : ""} onClick={() => { setMoreOpen(false); navigate("cart"); }}><i>♧</i> 购物车<small>{cart.length}</small></button>
+              <button className={view === "orders" ? "active" : ""} onClick={() => { setMoreOpen(false); navigate("orders"); }}><i>▤</i> 订单中心<small>{orders.length}</small></button>
+              <button className={view === "account" ? "active" : ""} onClick={() => { setMoreOpen(false); navigate("account"); }}><i>◎</i> 账户中心</button>
+            </div>}
+          </div>
           <button className="topnav-plan" onClick={() => setPlanOpen(true)}><i>⚡</i> 升级专业版</button>
         </nav>
       </header>

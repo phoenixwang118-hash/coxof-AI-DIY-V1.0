@@ -88,7 +88,16 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .topnav button.active i { color: #7257ff; }
 .topnav button b { padding: 2px 6px; border-radius: 10px; color: white; background: linear-gradient(135deg, #7257ff, #356df5); font-size: 7px; }
 .topnav button small { padding: 2px 6px; border-radius: 10px; color: white; background: var(--orange); font-size: 7px; }
-.topnav-divider { width: 1px; height: 18px; margin: 0 8px; flex: 0 0 auto; background: var(--line); }
+.topnav-more-wrap { position: relative; flex: 0 0 auto; }
+.topnav-more-wrap > button .caret { margin-left: 2px; font-size: 9px; }
+.more-menu { position: absolute; top: calc(100% + 6px); left: 0; z-index: 60; min-width: 168px; padding: 6px; border: 1px solid var(--line); border-radius: 11px; display: grid; gap: 2px; box-shadow: 0 18px 40px rgb(20 20 18 / .14); background: white; }
+.more-menu button { width: 100%; height: 36px; padding: 0 11px; border: 0; border-radius: 8px; display: flex; align-items: center; gap: 9px; color: #6f7169; background: transparent; font-size: 10px; font-weight: 700; white-space: nowrap; text-align: left; }
+.more-menu button:hover { color: var(--ink); background: #f4f4f8; }
+.more-menu button.active { color: #7257ff; background: rgb(114 87 255 / .08); }
+.more-menu button.active i { color: #7257ff; }
+.more-menu button i { width: 16px; color: #9a9c94; font-style: normal; font-size: 13px; text-align: center; }
+.more-menu button small { margin-left: auto; padding: 2px 6px; border-radius: 10px; color: white; background: var(--orange); font-size: 7px; }
+.cart-top.active { border-color: #7257ff; color: #7257ff; }
 .topnav-plan { margin-left: auto; height: 30px; padding: 0 14px; border: 1px solid rgb(114 87 255 / .35); border-radius: 999px; color: #7257ff; background: rgb(114 87 255 / .07); font-size: 9px; font-weight: 800; }
 .topnav-plan i { margin-right: 4px; font-style: normal; }
 .topnav-plan:hover { background: rgb(114 87 255 / .15); }
@@ -431,7 +440,10 @@ main { min-width: 0; }
   .topnav.open button { height: 42px; padding: 0 12px; border: 0; margin-bottom: 0; border-radius: 8px; justify-content: flex-start; }
   .topnav.open button.active { border-bottom-color: transparent; color: #7257ff; background: rgb(114 87 255 / .08); }
   .topnav.open .topnav-plan { margin: 6px 0 0; justify-content: center; }
-  .topnav-divider { display: none; }
+  .topnav.open .topnav-more-wrap { display: contents; }
+  .topnav.open .topnav-more-wrap > button .caret { display: none; }
+  .more-menu { position: static; min-width: 0; margin: 0 0 3px; padding: 0 0 0 12px; border: 0; border-left: 1px solid var(--line); border-radius: 0; box-shadow: none; background: transparent; }
+  .more-menu button { height: 40px; }
   .scrim { position: fixed; inset: 0; z-index: 25; display: block; border: 0; background: rgb(15 15 13 / .45); backdrop-filter: blur(2px); }
 }
 @media (max-width: 430px) {
