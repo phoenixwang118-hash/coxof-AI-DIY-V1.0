@@ -680,45 +680,13 @@ export default function Home() {
 
   return (
     <div className="shell">
-      <aside className={`sidebar ${mobileNav ? "open" : ""}`}>
-        <div className="brand">
-          <span className="brand-logo-crop sidebar-logo-crop">
-            <img src="/coxof-ai-diy-pod-logo.png" alt="coxof AI DIY POD" />
-          </span>
-          <button className="nav-close" onClick={() => setMobileNav(false)}>×</button>
-        </div>
-        <p className="nav-label">设计工作台</p>
-        <nav>
-          <button className={view === "dashboard" ? "active" : ""} data-label="工作台" onClick={() => navigate("dashboard")}><i>⌂</i> 工作台</button>
-          <button className={view === "catalog" ? "active" : ""} data-label="产品目录" onClick={() => setView("catalog")}><i>▦</i> 产品目录</button>
-          <button className={view === "design" ? "active" : ""} data-label="AI Design" onClick={() => openDesign()}><i>✦</i> AI Design <b>核心</b></button>
-          <button className={view === "assets" ? "active" : ""} data-label="设计素材" onClick={() => navigate("assets")}><i>◈</i> 设计素材</button>
-          <button className={view === "projects" ? "active" : ""} data-label="我的项目" onClick={() => setView("projects")}><i>▱</i> 我的项目</button>
-        </nav>
-        <p className="nav-label stage">生产与账户</p>
-        <nav>
-          <button className={view === "canvas" ? "active" : ""} data-label="Canvas 编辑器" onClick={() => navigate("canvas")}><i>□</i> Canvas 编辑器</button>
-          <button className={view === "mockup" ? "active" : ""} data-label="Mockup 样机" onClick={() => navigate("mockup")}><i>♙</i> Mockup 样机</button>
-          <button className={view === "cart" || view === "checkout" ? "active" : ""} data-label="购物车" onClick={() => navigate("cart")}><i>♧</i> 购物车<small>{cart.length}</small></button>
-          <button className={view === "orders" ? "active" : ""} data-label="订单中心" onClick={() => navigate("orders")}><i>▤</i> 订单中心<small>{orders.length}</small></button>
-          <button className={view === "account" ? "active" : ""} data-label="账户中心" onClick={() => navigate("account")}><i>◎</i> 账户中心</button>
-        </nav>
-        <div className="plan">
-          <div><span>本月 AI 点数</span><strong>{profile.creditsLimit - profile.creditsUsed} / {profile.creditsLimit}</strong></div>
-          <div className="meter"><i style={{ width: `${Math.max(0, Math.min(100, ((profile.creditsLimit - profile.creditsUsed) / profile.creditsLimit) * 100))}%` }} /></div>
-          <button className="plan-btn" onClick={() => setPlanOpen(true)}><span className="plan-label">升级专业版</span><b>⚡</b></button>
-        </div>
-        <button className="profile" onClick={() => { setProfileOpen(!profileOpen); setNotificationsOpen(false); }}><span>{profile.displayName.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase()}</span><div><strong>{profile.displayName}</strong><small>{cloudReady ? "云端工作区" : "本地工作区"}</small></div><i>⌄</i></button>
-        {profileOpen && <div className="profile-menu"><button onClick={() => navigate("account")}>账户与套餐</button><button onClick={() => navigate("help")}>帮助中心</button><a href="/admin">管理后台</a></div>}
-      </aside>
-
-      {mobileNav && <button className="scrim" onClick={() => setMobileNav(false)} aria-label="关闭导航" />}
-      {toast && <div className="toast">✓ {toast}</div>}
-
-      <main>
-        <header className="topbar">
+      <header className="site-head">
+        <div className="topbar">
           <div className="page-title">
-            <button className="menu" onClick={() => setMobileNav(true)}>☰</button>
+            <button className="menu" onClick={() => setMobileNav(!mobileNav)} aria-label="切换导航">☰</button>
+            <span className="brand-logo-crop topbar-logo-crop">
+              <img src="/coxof-ai-diy-pod-logo.png" alt="coxof AI DIY POD" />
+            </span>
             <div><strong>{titles[view]}</strong><small>coxof AI DIY V1.0</small></div>
           </div>
           <div className="top-actions">
@@ -730,9 +698,37 @@ export default function Home() {
             <button className="round notification-button" aria-label="通知" onClick={() => { setNotificationsOpen(!notificationsOpen); setProfileOpen(false); }}>♢<i /></button>
             <button className="cart-top" onClick={() => navigate("cart")}>购物车 <b>{cart.length}</b></button>
             <button className="new" onClick={() => openDesign()}><span>＋</span> 新建设计</button>
+            <div className="profile-wrap">
+              <button className="profile-top" onClick={() => { setProfileOpen(!profileOpen); setNotificationsOpen(false); }}>
+                <span>{profile.displayName.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase()}</span>
+                <strong>{profile.displayName}</strong>
+                <i>⌄</i>
+              </button>
+              {profileOpen && <div className="profile-menu"><button onClick={() => navigate("account")}>账户与套餐</button><button onClick={() => navigate("help")}>帮助中心</button><a href="/admin">管理后台</a></div>}
+            </div>
             {notificationsOpen && <div className="notifications-popover"><strong>通知</strong><span>前台功能已经启用</span><small>商品、AI 设计、Canvas、Mockup 与订单可完整体验</small><span>商品参数与目录同步</span><small>后台上架商品会显示在前台目录</small><button onClick={() => { setNotificationsOpen(false); setToast("通知已全部标为已读"); }}>全部标为已读</button></div>}
           </div>
-        </header>
+        </div>
+        <nav className={`topnav ${mobileNav ? "open" : ""}`}>
+          <button className={view === "dashboard" ? "active" : ""} onClick={() => navigate("dashboard")}><i>⌂</i> 工作台</button>
+          <button className={view === "catalog" ? "active" : ""} onClick={() => navigate("catalog")}><i>▦</i> 产品目录</button>
+          <button className={view === "design" ? "active" : ""} onClick={() => openDesign()}><i>✦</i> AI Design <b>核心</b></button>
+          <button className={view === "assets" ? "active" : ""} onClick={() => navigate("assets")}><i>◈</i> 设计素材</button>
+          <button className={view === "projects" ? "active" : ""} onClick={() => navigate("projects")}><i>▱</i> 我的项目</button>
+          <span className="topnav-divider" />
+          <button className={view === "canvas" ? "active" : ""} onClick={() => navigate("canvas")}><i>□</i> Canvas 编辑器</button>
+          <button className={view === "mockup" ? "active" : ""} onClick={() => navigate("mockup")}><i>♙</i> Mockup 样机</button>
+          <button className={view === "cart" || view === "checkout" ? "active" : ""} onClick={() => navigate("cart")}><i>♧</i> 购物车<small>{cart.length}</small></button>
+          <button className={view === "orders" ? "active" : ""} onClick={() => navigate("orders")}><i>▤</i> 订单中心<small>{orders.length}</small></button>
+          <button className={view === "account" ? "active" : ""} onClick={() => navigate("account")}><i>◎</i> 账户中心</button>
+          <button className="topnav-plan" onClick={() => setPlanOpen(true)}><i>⚡</i> 升级专业版</button>
+        </nav>
+      </header>
+
+      {mobileNav && <button className="scrim" onClick={() => setMobileNav(false)} aria-label="关闭导航" />}
+      {toast && <div className="toast">✓ {toast}</div>}
+
+      <main>
 
         {view === "dashboard" && (
           <section className="page dashboard-page">
