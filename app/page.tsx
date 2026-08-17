@@ -689,24 +689,24 @@ export default function Home() {
         </div>
         <p className="nav-label">设计工作台</p>
         <nav>
-          <button className={view === "dashboard" ? "active" : ""} onClick={() => navigate("dashboard")}><i>⌂</i> 工作台</button>
-          <button className={view === "catalog" ? "active" : ""} onClick={() => setView("catalog")}><i>▦</i> 产品目录</button>
-          <button className={view === "design" ? "active" : ""} onClick={() => openDesign()}><i>✦</i> AI Design <b>核心</b></button>
-          <button className={view === "assets" ? "active" : ""} onClick={() => navigate("assets")}><i>◈</i> 设计素材</button>
-          <button className={view === "projects" ? "active" : ""} onClick={() => setView("projects")}><i>▱</i> 我的项目</button>
+          <button className={view === "dashboard" ? "active" : ""} data-label="工作台" onClick={() => navigate("dashboard")}><i>⌂</i> 工作台</button>
+          <button className={view === "catalog" ? "active" : ""} data-label="产品目录" onClick={() => setView("catalog")}><i>▦</i> 产品目录</button>
+          <button className={view === "design" ? "active" : ""} data-label="AI Design" onClick={() => openDesign()}><i>✦</i> AI Design <b>核心</b></button>
+          <button className={view === "assets" ? "active" : ""} data-label="设计素材" onClick={() => navigate("assets")}><i>◈</i> 设计素材</button>
+          <button className={view === "projects" ? "active" : ""} data-label="我的项目" onClick={() => setView("projects")}><i>▱</i> 我的项目</button>
         </nav>
         <p className="nav-label stage">生产与账户</p>
         <nav>
-          <button className={view === "canvas" ? "active" : ""} onClick={() => navigate("canvas")}><i>□</i> Canvas 编辑器</button>
-          <button className={view === "mockup" ? "active" : ""} onClick={() => navigate("mockup")}><i>♙</i> Mockup 样机</button>
-          <button className={view === "cart" || view === "checkout" ? "active" : ""} onClick={() => navigate("cart")}><i>♧</i> 购物车<small>{cart.length}</small></button>
-          <button className={view === "orders" ? "active" : ""} onClick={() => navigate("orders")}><i>▤</i> 订单中心<small>{orders.length}</small></button>
-          <button className={view === "account" ? "active" : ""} onClick={() => navigate("account")}><i>◎</i> 账户中心</button>
+          <button className={view === "canvas" ? "active" : ""} data-label="Canvas 编辑器" onClick={() => navigate("canvas")}><i>□</i> Canvas 编辑器</button>
+          <button className={view === "mockup" ? "active" : ""} data-label="Mockup 样机" onClick={() => navigate("mockup")}><i>♙</i> Mockup 样机</button>
+          <button className={view === "cart" || view === "checkout" ? "active" : ""} data-label="购物车" onClick={() => navigate("cart")}><i>♧</i> 购物车<small>{cart.length}</small></button>
+          <button className={view === "orders" ? "active" : ""} data-label="订单中心" onClick={() => navigate("orders")}><i>▤</i> 订单中心<small>{orders.length}</small></button>
+          <button className={view === "account" ? "active" : ""} data-label="账户中心" onClick={() => navigate("account")}><i>◎</i> 账户中心</button>
         </nav>
         <div className="plan">
           <div><span>本月 AI 点数</span><strong>{profile.creditsLimit - profile.creditsUsed} / {profile.creditsLimit}</strong></div>
           <div className="meter"><i style={{ width: `${Math.max(0, Math.min(100, ((profile.creditsLimit - profile.creditsUsed) / profile.creditsLimit) * 100))}%` }} /></div>
-          <button onClick={() => setPlanOpen(true)}>升级专业版 <span>⚡</span></button>
+          <button className="plan-btn" onClick={() => setPlanOpen(true)}><span className="plan-label">升级专业版</span><b>⚡</b></button>
         </div>
         <button className="profile" onClick={() => { setProfileOpen(!profileOpen); setNotificationsOpen(false); }}><span>{profile.displayName.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase()}</span><div><strong>{profile.displayName}</strong><small>{cloudReady ? "云端工作区" : "本地工作区"}</small></div><i>⌄</i></button>
         {profileOpen && <div className="profile-menu"><button onClick={() => navigate("account")}>账户与套餐</button><button onClick={() => navigate("help")}>帮助中心</button><a href="/admin">管理后台</a></div>}
@@ -958,12 +958,95 @@ export default function Home() {
           </aside></div>
         </section>}
 
-        {view === "cart" && <section className="library-page checkout-page">
-          <div className="library-head"><div><span className="eyebrow">购物车</span><h1>确认商品与设计</h1><p>检查商品、尺码、数量和设计项目，然后进入结算。</p></div><button className="secondary" onClick={() => navigate("catalog")}>＋ 继续选择商品</button></div>
-          {cart.length === 0 ? <Empty icon="♧" title="购物车还是空的" text="先选择一个商品完成设计和 Mockup。" action={() => navigate("catalog")} /> :
-            <div className="cart-layout"><div className="cart-list">{cart.map((item) => { const itemProduct = products.find((p) => p.id === item.productId) || products[0]; return <article className="cart-item" key={item.id}><div className="cart-preview"><Mockup compact product={itemProduct} design={item.design} /></div><div className="cart-info"><span>{itemProduct.category}</span><h3>{itemProduct.name}</h3><p>设计：{item.projectName}</p><small>规格：{item.size} · 生产文件待最终检查</small><button onClick={() => { setProduct(itemProduct); setDesign(item.design); setProjectName(item.projectName); navigate("canvas"); }}>返回编辑设计</button></div><div className="cart-controls"><strong>¥{item.unitPrice * item.quantity}</strong><div className="quantity"><button onClick={() => updateCartQuantity(item.id, item.quantity - 1)}>−</button><b>{item.quantity}</b><button onClick={() => updateCartQuantity(item.id, item.quantity + 1)}>＋</button></div><button className="remove-link" onClick={() => removeCartItem(item.id)}>移除</button></div></article>; })}</div>
-              <aside className="cart-summary"><span className="eyebrow">订单摘要</span><dl className="price-breakdown"><div><dt>商品小计</dt><dd>¥{cartSubtotal}</dd></div><div><dt>预计运费</dt><dd>{cartSubtotal >= 99 ? "免运费" : "结算时计算"}</dd></div><div><dt>优惠</dt><dd>{discount ? `−¥${discount}` : "—"}</dd></div><div className="total"><dt>预计合计</dt><dd>¥{Math.max(0, cartSubtotal - discount)}</dd></div></dl><label className="coupon"><input value={coupon} onChange={(event) => setCoupon(event.target.value)} placeholder="优惠码：COXOF10" /><button onClick={applyCoupon}>使用</button></label><button className="primary full" onClick={() => { setCheckoutStep(1); navigate("checkout"); }}>进入安全结算 →</button><small>付款前仍可检查地址、配送费用与订单总额。</small></aside>
-            </div>}
+        {view === "cart" && <section className="library-page cart-page">
+          <div className="cart-hero">
+            <div className="cart-hero-head">
+              <span className="eyebrow">购物车 · 共 {cart.length} 件</span>
+              <h1>确认商品与设计</h1>
+              <p>检查商品、设计、规格和数量，确认无误后即可进入安全结算。</p>
+            </div>
+            <div className="cart-hero-stats">
+              <span><i>✓</i>生产文件已就绪</span>
+              <span><i>⏱</i>24h 内生产</span>
+              <span><i>※</i>满 ¥99 免运费</span>
+            </div>
+          </div>
+          {cart.length === 0 ? (
+            <div className="cart-empty">
+              <div className="cart-empty-art"><span>♧</span><i>+</i></div>
+              <h2>购物车还是空的</h2>
+              <p>选择商品并完成 AI 设计与 Mockup 后，会自动加入购物车。</p>
+              <div className="cart-empty-suggest">
+                <span>热门商品</span>
+                {defaultProducts.slice(0, 3).map((p) => <button key={p.id} className="cart-empty-chip" onClick={() => openDesign(p)}><span>{p.name}</span><small>{p.price}</small></button>)}
+              </div>
+              <button className="primary" onClick={() => navigate("catalog")}>浏览商品目录 →</button>
+            </div>
+          ) : (
+            <div className="cart-layout">
+              <div className="cart-list-head">
+                <span>商品 / 设计</span>
+                <span className="cart-col-spec">规格</span>
+                <span className="cart-col-qty">数量</span>
+                <span className="cart-col-price">小计</span>
+              </div>
+              <div className="cart-list">{cart.map((item) => { const itemProduct = products.find((p) => p.id === item.productId) || products[0]; const itemSubtotal = item.unitPrice * item.quantity; return (
+                <article className="cart-item" key={item.id}>
+                  <div className="cart-preview"><Mockup compact product={itemProduct} design={item.design} /></div>
+                  <div className="cart-info">
+                    <div className="cart-info-tags"><span className="cart-tag cat">{itemProduct.category}</span>{itemProduct.badge && <span className="cart-tag badge">{itemProduct.badge}</span>}</div>
+                    <h3>{itemProduct.name}</h3>
+                    <div className="cart-design-row"><span className="cart-design-label">设计</span><strong>{item.projectName}</strong></div>
+                    <div className="cart-meta-row">
+                      <span><b>尺码</b>{item.size}</span>
+                      <span><b>单价</b>¥{item.unitPrice}</span>
+                    </div>
+                    <div className="cart-actions-row">
+                      <button className="cart-link" onClick={() => { setProduct(itemProduct); setDesign(item.design); setProjectName(item.projectName); navigate("canvas"); }}>↻ 编辑设计</button>
+                      <button className="cart-link danger" onClick={() => removeCartItem(item.id)}>移除</button>
+                    </div>
+                  </div>
+                  <div className="cart-spec mobile-hide">
+                    <span className="cart-spec-label">生产文件</span>
+                    <strong>{item.size}</strong>
+                    <small>透明 PNG · 300 DPI</small>
+                    <em className="cart-spec-status">已就绪</em>
+                  </div>
+                  <div className="cart-qty">
+                    <div className="quantity">
+                      <button onClick={() => updateCartQuantity(item.id, item.quantity - 1)}>−</button>
+                      <b>{item.quantity}</b>
+                      <button onClick={() => updateCartQuantity(item.id, item.quantity + 1)}>＋</button>
+                    </div>
+                    <small>最多 99 件</small>
+                  </div>
+                  <div className="cart-price">
+                    <strong>¥{itemSubtotal}</strong>
+                    <small>¥{item.unitPrice} × {item.quantity}</small>
+                  </div>
+                </article>
+              ); })}</div>
+              <button className="cart-continue" onClick={() => navigate("catalog")}>＋ 继续添加商品</button>
+              <aside className="cart-summary">
+                <div className="cart-summary-head"><span className="eyebrow">订单摘要</span><b>共 {cart.length} 件</b></div>
+                <dl className="price-breakdown">
+                  <div><dt>商品小计</dt><dd>¥{cartSubtotal}</dd></div>
+                  <div><dt>预计运费</dt><dd className={cartSubtotal >= 99 ? "free" : ""}>{cartSubtotal >= 99 ? "免运费" : "结算时计算"}</dd></div>
+                  {discount > 0 && <div><dt>优惠</dt><dd className="discount">−¥{discount}</dd></div>}
+                  <div className="total"><dt>预计合计</dt><dd>¥{Math.max(0, cartSubtotal - discount)}</dd></div>
+                </dl>
+                {cartSubtotal < 99 && <div className="cart-shipping-progress"><div className="cart-progress-bar"><i style={{ width: `${Math.min(100, (cartSubtotal / 99) * 100)}%` }} /></div><small>再加 ¥{99 - cartSubtotal} 享免运费</small></div>}
+                <label className="coupon"><input value={coupon} onChange={(event) => setCoupon(event.target.value)} placeholder="优惠码：COXOF10" /><button onClick={applyCoupon}>使用</button></label>
+                <button className="primary full cart-checkout-btn" onClick={() => { setCheckoutStep(1); navigate("checkout"); }}><span>进入安全结算</span><b>→</b></button>
+                <div className="cart-trust">
+                  <span><i>🔒</i> SSL 加密结算</span>
+                  <span><i>↺</i> 24h 可取消</span>
+                  <span><i>✓</i> 生产质检</span>
+                </div>
+                <small className="cart-summary-note">付款前仍可检查地址、配送费用与订单总额。</small>
+              </aside>
+            </div>
+          )}
         </section>}
 
         {view === "checkout" && <section className="library-page checkout-page">
