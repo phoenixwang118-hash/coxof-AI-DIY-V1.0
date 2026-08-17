@@ -986,49 +986,43 @@ export default function Home() {
             </div>
           ) : (
             <div className="cart-layout">
-              <div className="cart-list-head">
-                <span>商品 / 设计</span>
-                <span className="cart-col-spec">规格</span>
-                <span className="cart-col-qty">数量</span>
-                <span className="cart-col-price">小计</span>
+              <div className="cart-main">
+                <div className="cart-toolbar">
+                  <span className="cart-count-label">共 {cart.length} 件商品</span>
+                  <button className="cart-add-more" onClick={() => navigate("catalog")}>＋ 继续添加商品</button>
+                </div>
+                <div className="cart-list">{cart.map((item) => { const itemProduct = products.find((p) => p.id === item.productId) || products[0]; const itemSubtotal = item.unitPrice * item.quantity; return (
+                  <article className="cart-item" key={item.id}>
+                    <div className="cart-preview"><Mockup compact product={itemProduct} design={item.design} /></div>
+                    <div className="cart-info">
+                      <div className="cart-info-top">
+                        <div className="cart-title-wrap">
+                          <div className="cart-info-tags"><span className="cart-tag cat">{itemProduct.category}</span>{itemProduct.badge && <span className="cart-tag badge">{itemProduct.badge}</span>}</div>
+                          <h3>{itemProduct.name}</h3>
+                        </div>
+                        <div className="cart-item-total"><strong>¥{itemSubtotal}</strong><small>¥{item.unitPrice} × {item.quantity}</small></div>
+                      </div>
+                      <div className="cart-design-row"><span className="cart-design-label">设计</span><strong>{item.projectName}</strong></div>
+                      <div className="cart-meta-row">
+                        <span><b>尺码</b>{item.size}</span>
+                        <span><b>单价</b>¥{item.unitPrice}</span>
+                        <span className="cart-file-chip"><i>✓</i>生产文件就绪 · 300 DPI</span>
+                      </div>
+                    </div>
+                    <div className="cart-item-side">
+                      <div className="quantity">
+                        <button onClick={() => updateCartQuantity(item.id, item.quantity - 1)}>−</button>
+                        <b>{item.quantity}</b>
+                        <button onClick={() => updateCartQuantity(item.id, item.quantity + 1)}>＋</button>
+                      </div>
+                      <div className="cart-actions-row">
+                        <button className="cart-link" onClick={() => { setProduct(itemProduct); setDesign(item.design); setProjectName(item.projectName); navigate("canvas"); }}>↻ 编辑设计</button>
+                        <button className="cart-link danger" onClick={() => removeCartItem(item.id)}>移除</button>
+                      </div>
+                    </div>
+                  </article>
+                ); })}</div>
               </div>
-              <div className="cart-list">{cart.map((item) => { const itemProduct = products.find((p) => p.id === item.productId) || products[0]; const itemSubtotal = item.unitPrice * item.quantity; return (
-                <article className="cart-item" key={item.id}>
-                  <div className="cart-preview"><Mockup compact product={itemProduct} design={item.design} /></div>
-                  <div className="cart-info">
-                    <div className="cart-info-tags"><span className="cart-tag cat">{itemProduct.category}</span>{itemProduct.badge && <span className="cart-tag badge">{itemProduct.badge}</span>}</div>
-                    <h3>{itemProduct.name}</h3>
-                    <div className="cart-design-row"><span className="cart-design-label">设计</span><strong>{item.projectName}</strong></div>
-                    <div className="cart-meta-row">
-                      <span><b>尺码</b>{item.size}</span>
-                      <span><b>单价</b>¥{item.unitPrice}</span>
-                    </div>
-                    <div className="cart-actions-row">
-                      <button className="cart-link" onClick={() => { setProduct(itemProduct); setDesign(item.design); setProjectName(item.projectName); navigate("canvas"); }}>↻ 编辑设计</button>
-                      <button className="cart-link danger" onClick={() => removeCartItem(item.id)}>移除</button>
-                    </div>
-                  </div>
-                  <div className="cart-spec mobile-hide">
-                    <span className="cart-spec-label">生产文件</span>
-                    <strong>{item.size}</strong>
-                    <small>透明 PNG · 300 DPI</small>
-                    <em className="cart-spec-status">已就绪</em>
-                  </div>
-                  <div className="cart-qty">
-                    <div className="quantity">
-                      <button onClick={() => updateCartQuantity(item.id, item.quantity - 1)}>−</button>
-                      <b>{item.quantity}</b>
-                      <button onClick={() => updateCartQuantity(item.id, item.quantity + 1)}>＋</button>
-                    </div>
-                    <small>最多 99 件</small>
-                  </div>
-                  <div className="cart-price">
-                    <strong>¥{itemSubtotal}</strong>
-                    <small>¥{item.unitPrice} × {item.quantity}</small>
-                  </div>
-                </article>
-              ); })}</div>
-              <button className="cart-continue" onClick={() => navigate("catalog")}>＋ 继续添加商品</button>
               <aside className="cart-summary">
                 <div className="cart-summary-head"><span className="eyebrow">订单摘要</span><b>共 {cart.length} 件</b></div>
                 <dl className="price-breakdown">
