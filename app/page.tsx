@@ -954,7 +954,7 @@ export default function Home() {
           <div className="design-head"><div><button className="back-link" onClick={() => navigate("canvas")}>← 返回 Canvas</button><h1>Mockup 样机预览</h1><p>确认商品效果和生产规格，再保存项目或创建订单。</p></div><Flow active={4} /></div>
           <div className="mockup-layout"><div className="mockup-main"><Mockup product={product} design={design} reference={mode === "image" ? referenceImage : null} /></div><aside className="order-builder"><span className="eyebrow">生产配置</span><h2>{product.name}</h2><p>设计：{projectName}</p>
             {!!product.sizes?.length && <div className="choice-group"><span>尺码</span><div>{product.sizes.map((item) => <button key={item} className={size === item ? "active" : ""} onClick={() => setSize(item)}>{item}</button>)}</div></div>}
-            <div className="choice-group"><span>数量</span><div className="quantity"><button onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button><b>{quantity}</b><button onClick={() => setQuantity(quantity + 1)}>＋</button></div></div>
+            <div className="choice-group"><span>数量</span><div className="quantity"><button onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button><input aria-label="数量" value={quantity} inputMode="numeric" onChange={(e) => { const v = e.target.value.replace(/\D/g, ""); setQuantity(v === "" ? 1 : Math.min(99, Number(v))); }} /><button onClick={() => setQuantity(Math.min(99, quantity + 1))}>＋</button></div></div>
             <dl className="price-breakdown"><div><dt>商品单价</dt><dd>{product.price}</dd></div><div><dt>数量</dt><dd>× {quantity}</dd></div><div className="total"><dt>预计合计</dt><dd>¥{Number(product.price.slice(1)) * quantity}</dd></div></dl>
             <button className="secondary full" onClick={() => saveProject(false)}>保存到我的项目</button><button className="primary full order-button" onClick={() => addToCart()}>加入购物车并结算 →</button><small className="order-note">加入购物车后可填写地址、配送与付款方式。</small>
           </aside></div>
@@ -1012,7 +1012,7 @@ export default function Home() {
                     <div className="cart-item-side">
                       <div className="quantity">
                         <button onClick={() => updateCartQuantity(item.id, item.quantity - 1)}>−</button>
-                        <b>{item.quantity}</b>
+                        <input aria-label="数量" value={item.quantity} inputMode="numeric" onChange={(e) => { const v = e.target.value.replace(/\D/g, ""); updateCartQuantity(item.id, v === "" ? 1 : Math.min(99, Number(v))); }} />
                         <button onClick={() => updateCartQuantity(item.id, item.quantity + 1)}>＋</button>
                       </div>
                       <div className="cart-actions-row">
